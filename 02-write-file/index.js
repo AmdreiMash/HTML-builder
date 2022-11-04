@@ -4,6 +4,7 @@ const path = require('path');
 
 const { stdin, stdout } = process;
 const output = fs.createWriteStream(path.join(__dirname, 'text.txt'));
+
 const bye = () => {
   console.log('\nПрограмма выполнена!')
   process.exit()

@@ -9,7 +9,7 @@ async function copyDir() {
   await fsProm.rm(path.join(__dirname, 'files-copy'), { recursive: true, force: true });
   try {
     const createDir = await fsProm.mkdir(path.join(__dirname, 'files-copy'), { recursive: true });
-    console.log(`created ${(createDir || 'done')}`);
+    console.log(`Выполнено`);
     const files = await getFiles('files', __dirname)
     files.forEach(async file => {
       try {
