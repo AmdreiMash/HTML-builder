@@ -11,7 +11,7 @@ async function buildPage() {
   try {
     const createDir = await mkdir(path.join(__dirname, 'project-dist'), { recursive: true });
     await cp(path.join(__dirname, 'assets'), path.join(__dirname, 'project-dist', 'assets'), { errorOnExist: true, recursive: true })
-    await createBundleCss(path.join(__dirname, 'project-dist'), 'style.css', path.join(__dirname, 'styles'))
+    await createBundleCss(path.join(__dirname, 'project-dist'), 'style.css', 'styles', __dirname)
   } catch {
     console.log()
   }

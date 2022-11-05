@@ -3,15 +3,15 @@ const { rm, open, readFile } = require('fs/promises');
 const path = require('path');
 const { createWriteStream, } = require('fs');
 
-async function createBundleCss(adres, file, styleDir) {
+async function createBundleCss(adres, file, styleDir, dirName) {
   await rm(path.join(adres, file), { recursive: true, force: true });
   try {
     const bundelCSS = createWriteStream(path.join(adres, file));
-    const CSSfiles = await myMod.getFiles(styleDir, __dirname);
+    const CSSfiles = await myMod.getFiles(styleDir, dirName);
 
     CSSfiles.forEach(async name => {
       if (name.split('.')[1] === 'css') {
-        const cssFile = await open(path.join(__dirname, styleDir, name));
+        const cssFile = await open(path.join(dirName, styleDir, name));
         const data = await cssFile.readFile('utf8');
         //console.log(data)
         bundelCSS.write(data + '\n')
@@ -25,7 +25,7 @@ async function createBundleCss(adres, file, styleDir) {
   };
 };
 
-createBundleCss(path.join(__dirname, 'project-dist'), 'bundle.css', 'styles');
+createBundleCss(path.join(__dirname, 'project-dist'), 'bundle.css', 'styles', __dirname);
 
 module.exports = createBundleCss;
 
