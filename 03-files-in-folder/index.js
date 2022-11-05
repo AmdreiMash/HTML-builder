@@ -3,11 +3,11 @@ const path = require('path');
 const { stat } = require('fs');
 
 
-const getFiles = async function (folder, dir, conLog = false) {
+const getFiles = async function (folder, dir, conLog = false, getDir = false) {
   const filesArr = [];
   const files = await readdir(path.join(dir, folder), { withFileTypes: true, });
   files.forEach(async element => {
-    if (!element.isDirectory()) {
+    if (!element.isDirectory() || getDir === true) {
       if (conLog === true) {
         stat(path.join(dir, folder, element.name), (err, stats) => {
           console.log(element.name.split(".").join(" - "), '-', stats.size + 'b');

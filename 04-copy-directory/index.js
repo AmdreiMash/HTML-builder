@@ -5,15 +5,15 @@ const getFiles = require('../03-files-in-folder/index');
 
 
 
-async function copyDir() {
-  await fsProm.rm(path.join(__dirname, 'files-copy'), { recursive: true, force: true });
+async function copyDir(dir, adres) {
+  await fsProm.rm(path.join(__dirname, adres), { recursive: true, force: true });
   try {
-    const createDir = await fsProm.mkdir(path.join(__dirname, 'files-copy'), { recursive: true });
+    const createDir = await fsProm.mkdir(path.join(__dirname, adres), { recursive: true });
     console.log(`Выполнено`);
-    const files = await getFiles('files', __dirname)
+    const files = await getFiles(dir, __dirname, false)
     files.forEach(async file => {
       try {
-        await fsProm.copyFile(path.join(__dirname, 'files', file), path.join(__dirname, 'files-copy', file))
+        await fsProm.copyFile(path.join(__dirname, dir, file), path.join(__dirname, adres, file))
       } catch {
         console.log('The file could not be copied');
       }
@@ -24,7 +24,7 @@ async function copyDir() {
 }
 
 
-copyDir()
+copyDir('files', 'files-copy')
 
 module.exports = { getFiles, copyDir };
 

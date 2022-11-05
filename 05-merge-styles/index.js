@@ -8,10 +8,12 @@ async function createBundleCss(adres, file, styleDir) {
   try {
     const bundelCSS = createWriteStream(path.join(adres, file));
     const CSSfiles = await myMod.getFiles(styleDir, __dirname);
+
     CSSfiles.forEach(async name => {
       if (name.split('.')[1] === 'css') {
         const cssFile = await open(path.join(__dirname, styleDir, name));
         const data = await cssFile.readFile('utf8');
+        //console.log(data)
         bundelCSS.write(data + '\n')
         await cssFile.close()
       } else {
