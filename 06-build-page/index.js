@@ -9,11 +9,26 @@ const { error, assert } = require('console');
 async function buildPage() {
   await rm(path.join(__dirname, 'project-dist'), { recursive: true, force: true });
   try {
-    const createDir = await mkdir(path.join(__dirname, 'project-dist', 'assets'), { recursive: true });
-    await createBundleCss(path.join(__dirname, 'project-dist'), 'style.css', 'styles', __dirname)
-    await copyAssets()
+  const createDir = await mkdir(path.join(__dirname, 'project-dist', 'assets'), { recursive: true });
+  await createBundleCss(path.join(__dirname, 'project-dist'), 'style.css', 'styles', __dirname)
+  await copyAssets()
+  await copyFile(path.join(__dirname, 'template.html'), path.join(__dirname, 'project-dist', 'index.html'))
+  const htmlFile = await open(path.join(__dirname, 'project-dist', 'index.html'));
+  let data = await htmlFile.readFile('utf8');
+  const tags = data.match(/{{.+/g)
+  tags.forEach(async (tag, index) => {
+    const file = tag.replace('{{', '').replace('}}', '') + '.html'
+    //console.log(file)
+    const component = await open(path.join(__dirname, 'components', file))
+    const componentData = await component.readFile('utf8')
+    //console.log(componentData +'\n')
+    data = data.replace(tag, componentData)
+    const htmlFileOutput = createWriteStream(path.join(__dirname, 'project-dist', 'index.html'));
+    htmlFileOutput.write(data + '\n')
+  });
+  htmlFile.close()
   } catch {
-    console.log()
+    console.error(err.message);
   }
 }
 
@@ -28,6 +43,7 @@ async function copyAssets() {
         //console.log(file)
         try {
           await copyFile(path.join(__dirname, 'assets', dir, file), path.join(__dirname, 'project-dist', 'assets', dir, file))
+          //bundelCSS.write(data + '\n')
         } catch {
           console.log('The file could not be copied');
         }
@@ -38,5 +54,9 @@ async function copyAssets() {
   })
 }
 
-
 buildPage()
+
+//! Тут почему то выдеат ошибку :
+//!"ENOTDIR: not a directory, scandir '/HTML-builder/06-build-page/assets/.DS_Store"
+//! на работу скрипта это не влияет) 
+//! Тут так же не бошлось без консольлогв из 3й части задания : )
