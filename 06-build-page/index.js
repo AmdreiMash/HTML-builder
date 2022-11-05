@@ -1,8 +1,8 @@
 const myMod = require('../04-copy-directory/index');
-const { rm, open, mkdir, cp } = require('fs/promises');
+const { rm, open, mkdir, copyFile } = require('fs/promises');
 const path = require('path');
 const { createWriteStream, } = require('fs');
-const  createBundleCss  = require('../05-merge-styles/index');
+const createBundleCss = require('../05-merge-styles/index');
 const { join } = require('path');
 const { error, assert } = require('console');
 
@@ -11,16 +11,32 @@ async function buildPage() {
   try {
     const createDir = await mkdir(path.join(__dirname, 'project-dist', 'assets'), { recursive: true });
     await createBundleCss(path.join(__dirname, 'project-dist'), 'style.css', 'styles', __dirname)
-
+    await copyAssets()
   } catch {
     console.log()
   }
 }
 
-async function copyAssets(){
-  const files = await myMod.getFiles('assets', __dirname, false, true);
-  files.forEach(dir =>{
-    myMod.copyDir(path.join('assets', dir), path.join('project-dist', 'assets', dir))
+async function copyAssets() {
+  const dirs = await myMod.getFiles('assets', __dirname, false, true);
+  //console.log(dirs)
+  dirs.forEach(async dir => {
+    try {
+      const createDir = await mkdir(path.join(__dirname, 'project-dist', 'assets', dir), { recursive: true });
+      const files = await myMod.getFiles(dir, path.join(__dirname, 'assets'), false);
+      files.forEach(async file => {
+        //console.log(file)
+        try {
+          await copyFile(path.join(__dirname, 'assets', dir, file), path.join(__dirname, 'project-dist', 'assets', dir, file))
+        } catch {
+          console.log('The file could not be copied');
+        }
+      })
+    } catch (err) {
+      console.error(err.message);
+    }
   })
 }
+
+
 buildPage()
