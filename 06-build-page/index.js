@@ -59,6 +59,6 @@ async function copyAssets() {
 buildPage()
 
 //! Тут почему то выдеат ошибку :
-//!"ENOTDIR: not a directory, scandir '/HTML-builder/06-build-page/assets/.DS_Store"
+//!"ENOTDIR: not a directory, scandir '/HTML-builder/06-build-page/assets/.DS_Store" - откуда он приехал я не пнял)
 //! на работу скрипта это не влияет) 
-//! Тут так же не бошлось без консольлогв из 3й части задания : )
+//! Тут так же не обошлось без консольлогв из 3й части задания : )
