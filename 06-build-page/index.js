@@ -25,6 +25,8 @@ async function buildPage() {
     data = data.replace(tag, componentData)
     const htmlFileOutput = createWriteStream(path.join(__dirname, 'project-dist', 'index.html'));
     htmlFileOutput.write(data + '\n')
+    component.close()
+    htmlFileOutput.close()
   });
   htmlFile.close()
   } catch {
